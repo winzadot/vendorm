@@ -1,38 +1,8 @@
-# Notes on Architecture Patterns with Python
 
-Harry Percival and Bob Gregory
+## Domain Modeling
 
-## Chapter 1 Domain Modeling
+![image](https://user-images.githubusercontent.com/66631333/116009168-aafd1400-a5dd-11eb-8d61-fd7db6f58954.png)
 
-Be mindful that the examples in the book unfold from a domain context involving furniture distribution/wholesale.
-
-This image is very useful to remain oriented:
-
-![Furniture Distribution Domain Model](https://i.imgur.com/hHMeVS1.png)
-
-### Domain Language
-
-Equally useful is to bear the language of the domain in mind. The "Some Notes on Allocation" helps here:
-
-> A product is identified by a SKU, pronounced “skew,” which is short for stock-keeping unit. Customers place orders. 
-> An order is identified by an order reference and comprises multiple order lines, where each line has a SKU and a quantity. 
-> For example: 
-> * 10 units of RED-CHAIR 
-> * 1 unit of TASTELESS-LAMP 
-> The purchasing department orders small batches of stock. 
-> A batch of stock has a unique ID called a reference, a SKU, and a quantity. 
-> We need to allocate order lines to batches. When we’ve allocated an order line to a batch, we will send stock from that specific batch to the customer’s delivery address. When we allocate x units of stock to a batch, the available quantity is reduced by x. 
-> For example: 
-> * We have a batch of 20 SMALL-TABLE, and we allocate an order line for 2 SMALL-TABLE. 
-> * The batch should have 18 SMALL-TABLE remaining. 
-> We can’t allocate to a batch if the available quantity is less than the quantity of the order line. 
-> For example: 
-> * We have a batch of 1 BLUE-CUSHION, and an order line for 2 BLUE-CUSHION. 
-> * We should not be able to allocate the line to the batch. 
-> We can’t allocate the same line twice. For example: 
-> * We have a batch of 10 BLUE-VASE, and we allocate an order line for 2 BLUE-VASE. 
-> * If we allocate the order line again to the same batch, the batch should still have an available quantity of 8. 
-> Batches have an ETA if they are currently shipping, or they may be in warehouse stock. We allocate to warehouse stock in preference to shipment batches. We allocate to shipment batches in order of which has the earliest ETA.
 
 ### Running tests with Pytest
 
@@ -56,7 +26,7 @@ Key files at this stage:
 * tests for allocate and batches
 * domain model classes/functions
 
-## Chapter 2 - Repository Pattern
+##  Repository Pattern
 
 This chapter introduces the use of SQLAlchemy and the basics of a [Repository Pattern](https://codewithshadman.com/repository-pattern-csharp/) using Python.
 
@@ -73,11 +43,11 @@ Everything is tested, so there are two new test modules:
 * test_orm
 * test_repository
 
-# End-of-Book Refactor
+#  Refactor
 
 By the end of the book, the code reflects the following diagram:
 
-![Allocation and APP Appendix A](https://i.imgur.com/wHKRxGf.jpg)
+![image](https://user-images.githubusercontent.com/66631333/116009250-08916080-a5de-11eb-9de1-792564ee0a97.png)
 
 This involves a transition towards the following:
 
@@ -102,4 +72,3 @@ This involves a transition towards the following:
     * Event consumer
     * External Message Bus (Redis)
 
-That is quite a journey.
