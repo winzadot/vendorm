@@ -1,4 +1,4 @@
-{
+.\env\Scripts\activate{
     "python.testing.unittestArgs": [
         "-v",
         "-s",
