@@ -11,7 +11,35 @@ from ..random_refs import random_sku, random_batchref, random_orderid
 
 pytestmark = pytest.mark.usefixtures("mappers")
 
+def insert_user(session, id, username,password):
+    session.execute(
+        "INSERT INTO users (id, username,password) VALUES (:id, :username,:password",
+        dict(username=username, password=password),
+    )
+    
+def test_userrolls_back_uncommitted_work_by_default(sqlite_session_factory):
+    uow = unit_of_work.SqlAlchemyUnitOfWork(sqlite_session_factory)
+    with uow:
+        insert_user(uow.session,1, "username1", "p@343434")
 
+    new_session = sqlite_session_factory()
+    rows = list(new_session.execute('SELECT * FROM "users"'))
+    assert rows == []
+
+
+def test_userrolls_back_on_error(sqlite_session_factory):
+    class MyException(Exception):
+        pass
+
+    uow = unit_of_work.SqlAlchemyUnitOfWork(sqlite_session_factory)
+    with pytest.raises(MyException):
+        with uow:
+            insert_user(uow.session,1, "username1", "p@343434")
+            raise MyException()
+
+    new_session = sqlite_session_factory()
+    rows = list(new_session.execute('SELECT * FROM "batches"'))
+    assert rows == []
 def insert_batch(session, ref, sku, qty, eta, product_version=1):
     session.execute(
         "INSERT INTO products (sku, version_number) VALUES (:sku, :version)",
