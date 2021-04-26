@@ -4,6 +4,28 @@ from datetime import date
 from typing import Optional, List, Set
 from . import commands, events
 
+class User:
+    def __init__(self, username: str,pwd:str):
+        self.username = username
+        self.pwd = pwd
+        self.events = []  # type: List[events.Event]
+    def userlogin(self ,user:User)->str:
+        try:
+            User = next(b for b in sorted(self.Users) if b.valid_user(user))                      
+            self.events.append(
+                events.LoggedIn(
+                    id=user.id,
+                    username=user.username,
+                    password=user.password
+                )
+            )
+            return user.username
+        except StopIteration:
+            self.events.append(events.InvalidAccount(self.username))
+            return None
+    @property
+    def valid_user(self, user: User) -> bool:
+        return self.id == User.id 
 
 class Product:
     def __init__(self, sku: str, batches: List[Batch], version_number: int = 0):
@@ -88,3 +110,6 @@ class Batch:
 
     def can_allocate(self, line: OrderLine) -> bool:
         return self.sku == line.sku and self.available_quantity >= line.qty
+
+  
+    

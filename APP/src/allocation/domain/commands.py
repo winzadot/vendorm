@@ -7,6 +7,11 @@ from dataclasses import dataclass
 class Command:
     pass
 
+@dataclass
+class UserLogin(Command):
+    id: int
+    username: str
+    password: str
 
 @dataclass
 class Allocate(Command):

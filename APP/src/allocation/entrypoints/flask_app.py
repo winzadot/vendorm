@@ -2,11 +2,24 @@ from datetime import datetime
 from flask import Flask, jsonify, request
 from allocation.domain import commands
 from allocation.service_layer.handlers import InvalidSku
+from allocation.service_layer.handlers import InvalidUsers
 from allocation import bootstrap, views
 
 app = Flask(__name__)
 bus = bootstrap.bootstrap()
 
+
+@app.route("/userlogin", methods=["POST"])
+def userlogin_endpoint():
+    try:
+        cmd = commands.UserLogin(
+            request.json["id"], request.json["username"], request.json["password"]
+        )
+        bus.handle(cmd)
+    except InvalidUsers as e:
+        return {"message": str(e)}, 400
+
+    return "OK", 200
 
 @app.route("/add_batch", methods=["POST"])
 def add_batch():

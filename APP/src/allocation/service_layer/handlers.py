@@ -9,6 +9,10 @@ if TYPE_CHECKING:
     from allocation.adapters import notifications
     from . import unit_of_work
 
+class InvalidUser(Exception):
+    pass
+
+
 
 class InvalidSku(Exception):
     pass

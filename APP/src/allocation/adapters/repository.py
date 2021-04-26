@@ -23,7 +23,18 @@ class AbstractRepository(abc.ABC):
         if product:
             self.seen.add(product)
         return product
-
+ 
+    def get_by_usertype(self, usertypref) -> model.UserType:
+        usertype = self.get_by_usertype(usertypref)
+        if usertype:
+            self.seen.add(usertype)
+        return usertype
+   
+    def get_by_user(self, user) -> model.User:
+        user = self.get_by_user(user)
+        if user:
+            self.seen.add(user)
+        return user
     @abc.abstractmethod
     def _add(self, product: model.Product):
         raise NotImplementedError

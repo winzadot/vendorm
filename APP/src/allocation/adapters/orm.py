@@ -16,7 +16,22 @@ from allocation.domain import model
 logger = logging.getLogger(__name__)
 
 metadata = MetaData()
+users= Table(
+    "users",
+    metadata,
+    Column("id", Integer, primary_key=True, autoincrement=True),
+    Column("username", String(255)),
+    Column("usertype", Integer,ForeignKey("user_types.id"), nullable=False),
+    Column("password", String(255))
+)
 
+usertypes= Table(
+    "user_types",
+    metadata,
+    Column("id", Integer, primary_key=True, autoincrement=True),
+    Column("name", String(255))
+    
+)
 order_lines = Table(
     "order_lines",
     metadata,
