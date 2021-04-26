@@ -9,6 +9,12 @@ def post_to_add_batch(ref, sku, qty, eta):
     )
     assert r.status_code == 201
 
+def post_to_add_user(ref, id, username, pssword,usertype):
+    url = config.get_api_url()
+    r = requests.post(
+        f"{url}/add_user", json={"id": id, "username": username, "password": pssword, "usertype": usertype}
+    )
+    assert r.status_code == 201
 
 def post_to_allocate(orderid, sku, qty, expect_success=True):
     url = config.get_api_url()
